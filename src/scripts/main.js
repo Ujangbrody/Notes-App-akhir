@@ -158,12 +158,33 @@ const showResponseMessage = (message = 'Check your internet connection') => {
     alert(message);
 };
 
+// Fungsi untuk menampilkan indikator loading
+const showLoadingIndicator = () => {
+    const notesContainer = document.getElementById('notesContainer');
+    const loadingIndicator = document.createElement('div');
+    loadingIndicator.classList.add('loading-indicator');
+    const spinner = document.createElement('div');
+    spinner.classList.add('spinner');
+    loadingIndicator.appendChild(spinner);
+    notesContainer.appendChild(loadingIndicator);
+};
+
+// Fungsi untuk menyembunyikan indikator loading
+const hideLoadingIndicator = () => {
+    const loadingIndicator = document.querySelector('.loading-indicator');
+    if (loadingIndicator) {
+        loadingIndicator.remove();
+    }
+};
+
 // Base URL untuk API catatan
 const baseUrl = 'https://notes-api.dicoding.dev/v2';
 
 // Fungsi untuk mendapatkan catatan dari server
 const getNote = async () => {
     try {
+        showLoadingIndicator(); // Tampilkan indikator loading sebelum request dimulai
+
         const response = await fetch(`${baseUrl}/notes`);
         const responseJson = await response.json();
         if (responseJson.error) {
@@ -173,12 +194,16 @@ const getNote = async () => {
         }
     } catch (error) {
         showResponseMessage(error);
+    } finally {
+        hideLoadingIndicator(); // Sembunyikan indikator loading setelah request selesai
     }
 };
 
 // Fungsi untuk mendapatkan catatan non-archived dari server
 const getNoteNonArchive = async () => {
     try {
+        showLoadingIndicator(); // Tampilkan indikator loading sebelum request dimulai
+
         const response = await fetch(`${baseUrl}/notes`);
         const responseJson = await response.json();
         if (responseJson.error) {
@@ -190,12 +215,16 @@ const getNoteNonArchive = async () => {
         }
     } catch (error) {
         showResponseMessage(error);
+    } finally {
+        hideLoadingIndicator(); // Sembunyikan indikator loading setelah request selesai
     }
 };
 
 // Fungsi untuk mendapatkan catatan archived dari server
 const getNoteArchive = async () => {
     try {
+        showLoadingIndicator(); // Tampilkan indikator loading sebelum request dimulai
+
         const response = await fetch(`${baseUrl}/notes/archived`);
         const responseJson = await response.json();
         if (responseJson.error) {
@@ -207,6 +236,8 @@ const getNoteArchive = async () => {
         }
     } catch (error) {
         showResponseMessage(error);
+    } finally {
+        hideLoadingIndicator(); // Sembunyikan indikator loading setelah request selesai
     }
 };
 
