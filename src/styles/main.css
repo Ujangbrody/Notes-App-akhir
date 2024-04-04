@@ -42,6 +42,11 @@ h1 {
 	gap: 20px;
 }
 
+.note button {
+	background-color: #247ba0;
+}
+
+
 .note {
 	background-color: #f9f9f9;
 	border-radius: 10px;
@@ -58,8 +63,11 @@ h1 {
 	color: #1a090d;
 }
 
-button {
+.note-actions button {
 	background-color: #f67904;
+}
+
+button {
 	color: #ffffff;
 	border: none;
 	border-radius: 5px;
@@ -67,6 +75,7 @@ button {
 	padding: 10px 20px;
 	cursor: pointer;
 	transition: background-color 0.3s;
+	margin-top: 5px;
 }
 
 button:hover {
