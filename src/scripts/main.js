@@ -27,7 +27,7 @@ class AppBar extends HTMLElement {
       this.innerHTML = `
       <header style="background-color: #247ba0; color: #fff; padding: 10px; display: flex; align-items: center; border-radius: 20px; 	border-bottom-left-radius: 10px;
       border-bottom-right-radius: 10px;">
-          <img src="./src/img/icon.png" alt="Logo" style="width: 40px; height: 40px; margin-right: 10px;">
+          <img src="./img/icon.png" alt="Logo" style="width: 40px; height: 40px; margin-right: 10px;">
           <h1 style="margin: 0;">My Notes</h1>
       </header>
   `;
@@ -93,8 +93,28 @@ const getNote = async () => {
     if (responseJson.error) {
       showResponseMessage(responseJson.message);
     } else {
-      renderNotes(responseJson.notes);
+      renderNotes(responseJson.data);
     }
+  } catch (error) {
+    showResponseMessage(error);
+  }
+};
+
+const insertBook = async (book) => {
+  try {
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Auth-Token': '12345',
+      },
+      body: JSON.stringify(book),
+    };
+
+    const response = await fetch(`${baseUrl}/add`, options);
+    const responseJson = await response.json();
+    showResponseMessage(responseJson.message);
+    getBook();
   } catch (error) {
     showResponseMessage(error);
   }
