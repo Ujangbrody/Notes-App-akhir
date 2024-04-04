@@ -9,7 +9,7 @@
     "start-dev": "webpack serve --config webpack.dev.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Ujangbrody",
   "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.24.3",

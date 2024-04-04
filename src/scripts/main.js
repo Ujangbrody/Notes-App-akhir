@@ -22,15 +22,15 @@ class NoteElement extends HTMLElement {
 
     // Metode yang dipanggil ketika elemen terhubung
     connectedCallback() {
-        const { id, title, body } = this.dataset;
+        const { id, title, body, archived } = this.dataset;
         this.innerHTML = `
           <div class="note" data-id="${id}">
             <h2>${title}</h2>
             <p>${body}</p>
             <div class="note-actions">
               <button onclick="removeNote('${id}')">delete</button>
-              <button class="archive-btn">Archive Note</button>
-              <button class="unarchive-btn">Unarchive Note</button>
+              ${archived === 'true' ? '' : '<button class="archive-btn">Archive Note</button>'}
+              ${archived === 'true' ? '<button class="unarchive-btn">Unarchive Note</button>' : ''}
             </div>
           </div>
         `;
@@ -48,11 +48,15 @@ class NoteElement extends HTMLElement {
                 },
                 body: JSON.stringify({ archived: true }),
             };
-
+    
             const response = await fetch(`${baseUrl}/notes/${id}/archive`, options);
             const responseJson = await response.json();
             showResponseMessage(responseJson.message);
-            getNote();
+            
+            // Ambil kembali catatan non-arsip setelah berhasil mengarsipkan catatan
+            getNoteNonArchive();
+            // Ambil kembali catatan yang diarsipkan setelah berhasil mengarsipkan catatan
+            getNoteArchive();
         } catch (error) {
             showResponseMessage(error);
         }
@@ -70,17 +74,46 @@ class NoteElement extends HTMLElement {
                 },
                 body: JSON.stringify({ archived: false }),
             };
-
+    
             const response = await fetch(`${baseUrl}/notes/${id}/unarchive`, options);
             const responseJson = await response.json();
             showResponseMessage(responseJson.message);
-            getNote();
+            
+            // Ambil kembali catatan non-arsip setelah berhasil membuka kembali catatan
+            getNoteNonArchive();
+            // Ambil kembali catatan yang diarsipkan setelah berhasil membuka kembali catatan
+            getNoteArchive();
         } catch (error) {
             showResponseMessage(error);
         }
     }
 }
+
+window.removeNote = async (id) => {
+    try {
+        const confirmDelete = confirm('Are you sure you want to delete this note?');
+        if (confirmDelete) {
+            const options = {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Auth-Token': '12345',
+                },
+            };
+  
+            const response = await fetch(`${baseUrl}/notes/${id}`, options);
+            const responseJson = await response.json();
+            showResponseMessage(responseJson.message);
+            getNote(); // Ambil data catatan setelah berhasil menghapus catatan
+        }
+    } catch (error) {
+        showResponseMessage(error);
+    }
+  };
+
 customElements.define("note-element", NoteElement);
+
+
 
 // Definisi kelas AppBar
 class AppBar extends HTMLElement {
@@ -203,28 +236,6 @@ const insertNote = async (title, body) => {
     }
 };
 
-// Fungsi untuk menghapus catatan
-const removeNote = async (id) => {
-    try {
-        const confirmRemove = confirm('Are you sure you want to remove this note?');
-        if (confirmRemove) {
-            const options = {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Auth-Token': '12345',
-                },
-            };
-
-            const response = await fetch(`${baseUrl}/notes/${id}`, options);
-            const responseJson = await response.json();
-            showResponseMessage(responseJson.message);
-            getNote();
-        }
-    } catch (error) {
-        showResponseMessage(error);
-    }
-};
 
 // Event listener untuk opsi archiveOptions
 const archiveOptions = document.getElementById('archiveOptions');
@@ -247,6 +258,7 @@ const renderNotes = (notes) => {
         noteElement.dataset.id = note.id;
         noteElement.dataset.title = note.title;
         noteElement.dataset.body = note.body;
+        noteElement.dataset.archived = note.archived;
         notesContainer.appendChild(noteElement);
     });
 };
@@ -263,6 +275,7 @@ const renderArchivedNotes = (notes) => {
             noteElement.dataset.id = note.id;
             noteElement.dataset.title = note.title;
             noteElement.dataset.body = note.body;
+            noteElement.dataset.archived = note.archived;
             notesContainer.appendChild(noteElement);
         }
     });
@@ -279,6 +292,7 @@ const renderNonArchivedNotes = (notes) => {
             noteElement.dataset.id = note.id;
             noteElement.dataset.title = note.title;
             noteElement.dataset.body = note.body;
+            noteElement.dataset.archived = note.archived;
             notesContainer.appendChild(noteElement);
         }
     });
