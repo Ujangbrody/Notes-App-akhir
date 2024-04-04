@@ -1,0 +1,105 @@
+body {
+	font-family: "Poppins", sans-serif;
+	margin: 0;
+	padding: 0;
+	background-color: #f5f5f5;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 100vh;
+}
+
+.notes {
+	width: 100%;
+	max-width: 800px;
+	padding: 20px;
+	background-color: #ffffff;
+	box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+	border-radius: 10px;
+}
+
+header {
+	display: flex;
+	align-items: center;
+	margin-bottom: 20px;
+}
+
+header img {
+	width: 40px;
+	height: 40px;
+	margin-right: 10px;
+}
+
+h1 {
+	margin: 0;
+	font-size: 24px;
+	color: #ffffff;
+}
+
+.container {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+	gap: 20px;
+}
+
+.note {
+	background-color: #f9f9f9;
+	border-radius: 10px;
+	padding: 20px;
+	box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.note h2 {
+	margin-top: 0;
+	color: #247ba0;
+}
+
+.note p {
+	color: #1a090d;
+}
+
+button {
+	background-color: #f67904;
+	color: #ffffff;
+	border: none;
+	border-radius: 5px;
+	font-size: 16px;
+	padding: 10px 20px;
+	cursor: pointer;
+	transition: background-color 0.3s;
+}
+
+button:hover {
+	background-color: #247ba0;
+}
+
+.note-actions button {
+	margin-left: 5px;
+}
+
+.note-actions button:hover {
+	color: #247ba0;
+}
+
+/* Tambahkan gaya untuk textarea */
+textarea {
+	width: calc(100% - 20px);
+	padding: 10px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	margin-bottom: 10px;
+	resize: vertical; /* Biarkan textarea dapat diresize secara vertikal */
+	font-family: "Poppins", sans-serif;
+	font-size: 14px;
+}
+
+#submitNote {
+	background-color: #247ba0;
+	color: #ffffff;
+	font-weight: bold;
+	transition: background-color 0.3s;
+}
+
+#submitNote:hover {
+	background-color: #1a090d;
+}
